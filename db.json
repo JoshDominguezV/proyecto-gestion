@@ -1,0 +1,8 @@
+{
+  "users": [
+    { "id": 1, "username": "admin", "password": "1234", "role": "gerente" },
+    { "id": 2, "username": "user", "password": "1234", "role": "usuario" }
+  ],
+  "projects": [],
+  "tasks": []
+}
