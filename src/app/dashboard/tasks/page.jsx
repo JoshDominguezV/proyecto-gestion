@@ -74,10 +74,11 @@ export default function TasksPage() {
     }
   };
 
-  const getUserName = (id) => {
-    const user = users.find(u => u.id === id);
-    return user ? user.username : "Sin asignar";
-  };
+const getUserName = (id) => {
+  const user = users.find(u => String(u.id) === String(id));
+  return user ? user.username : "Sin asignar";
+};
+
 
   const getProjectName = (id) => {
     const project = projects.find(p => p.id === id);

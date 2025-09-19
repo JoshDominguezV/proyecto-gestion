@@ -22,12 +22,8 @@ export default function ViewProject() {
     const loadData = async () => {
       try {
         setLoading(true);
-        const projectId = typeof params.id === 'string' ? parseInt(params.id, 10) : params.id;
+        const projectId = String(params.id);
         
-        if (isNaN(projectId)) {
-          throw new Error("ID de proyecto inválido");
-        }
-
         const [projectData, tasksData, usersData] = await Promise.all([
           getProjectById(projectId),
           getTasksByProject(projectId),

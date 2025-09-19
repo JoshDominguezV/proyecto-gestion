@@ -1,50 +1,51 @@
 // src/services/taskService.js
 import api from "./api";
 
+// 🔧 Normalizar tarea
+const normalizeTask = (task) => ({
+  ...task,
+  id: task.id, // puede ser string o number
+  projectId: task.projectId // mantener tal cual (puede ser string o number)
+});
+
 export const getTasks = async () => {
   const res = await api.get("/tasks");
-  return res.data;
+  console.log("📋 Tareas obtenidas:", res.data);
+  return res.data.map(normalizeTask);
 };
 
 export const getTasksByProject = async (projectId) => {
-  const numericProjectId = typeof projectId === 'string' ? parseInt(projectId, 10) : projectId;
-  const res = await api.get(`/tasks?projectId=${numericProjectId}`);
-  return res.data;
+  console.log("🔍 Buscando tareas del proyecto:", projectId);
+  // Pasamos el projectId tal cual, no lo forzamos a number
+  const res = await api.get(`/tasks?projectId=${projectId}`);
+  return res.data.map(normalizeTask);
 };
 
 export const getTaskById = async (id) => {
-  const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
-  const res = await api.get(`/tasks/${numericId}`);
-  return res.data;
+  console.log("🔍 Buscando tarea con ID:", id);
+  const res = await api.get(`/tasks/${id}`);
+  return normalizeTask(res.data);
 };
 
 export const createTask = async (task) => {
+  console.log("➕ Creando tarea:", task);
   const res = await api.post("/tasks", task);
-  return res.data;
+  console.log("✅ Tarea creada:", res.data);
+  return normalizeTask(res.data);
 };
 
-
-
-// export const createTask = async (task) => {
-//   const tasks = await getTasks();
-//   const maxId = tasks.reduce((max, t) => Math.max(max, typeof t.id === 'number' ? t.id : parseInt(t.id, 10)), 0);
-  
-//   const newTask = {
-//     ...task,
-//     id: maxId + 1
-//   };
-  
-//   const res = await api.post("/tasks", newTask);
-//   return res.data;
-// };
+// Si quisieras forzar IDs numéricos secuenciales, puedes usar la versión comentada.
+// Pero por ahora dejamos que json-server genere el ID (string o number).
 
 export const updateTask = async (id, task) => {
-  const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
-  const res = await api.put(`/tasks/${numericId}`, task);
-  return res.data;
+  console.log("✏️ Actualizando tarea ID:", id, "con datos:", task);
+  const res = await api.put(`/tasks/${id}`, task);
+  console.log("✅ Tarea actualizada:", res.data);
+  return normalizeTask(res.data);
 };
 
 export const deleteTask = async (id) => {
-  const numericId = typeof id === 'string' ? parseInt(id, 10) : id;
-  await api.delete(`/tasks/${numericId}`);
+  console.log("🗑️ Eliminando tarea ID:", id);
+  await api.delete(`/tasks/${id}`);
+  console.log("✅ Tarea eliminada exitosamente");
 };
