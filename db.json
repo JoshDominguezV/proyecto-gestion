@@ -1,8 +1,26 @@
 {
   "users": [
-    { "id": 1, "username": "admin", "password": "1234", "role": "gerente" },
-    { "id": 2, "username": "user", "password": "1234", "role": "usuario" }
+    {
+      "id": "1",
+      "username": "admin",
+      "password": "123",
+      "role": "gerente"
+    },
+    {
+      "id": "2",
+      "username": "jose",
+      "password": "123",
+      "role": "usuario"
+    },
+    {
+      "id": "26aa",
+      "username": "admin5",
+      "password": "56666",
+      "role": "usuario"
+    }
   ],
-  "projects": [],
+  "projects": [
+
+  ],
   "tasks": []
 }
