@@ -30,8 +30,8 @@ export default function CreateTask() {
     await createTask({
       title,
       description,
-      projectId: parseInt(projectId, 10),
-      assignedTo: assignedTo ? parseInt(assignedTo, 10) : null,
+      projectId: projectId,
+      assignedTo: assignedTo,
       status: "pendiente",
       createdAt: new Date().toISOString().slice(0,10)
     });

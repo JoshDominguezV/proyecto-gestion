@@ -23,8 +23,7 @@ export default function EditProject() {
         setLoading(true);
         setError("");
 
-        const projectId = typeof params.id === "string" ? parseInt(params.id, 10) : params.id;
-        if (isNaN(projectId)) throw new Error("ID de proyecto inválido");
+        const projectId = String(params.id);
 
         const [projectData, usersData] = await Promise.all([
           getProjectById(projectId),
@@ -86,8 +85,7 @@ export default function EditProject() {
       setSaving(true);
       setError("");
 
-      const projectId = typeof params.id === "string" ? parseInt(params.id, 10) : params.id;
-      if (isNaN(projectId)) throw new Error("ID de proyecto inválido");
+      const projectId = String(params.id);
 
       await updateProject(projectId, project);
       alert("Proyecto actualizado exitosamente");
