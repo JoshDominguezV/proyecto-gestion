@@ -17,12 +17,11 @@ export default function EditTask() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
   useEffect(() => {
     const loadData = async () => {
       try {
         setLoading(true);
-        const taskId = typeof params.id === 'string' ? parseInt(params.id, 10) : params.id;
+        const taskId = params.id; 
         
         const [taskData, projectsData, usersData] = await Promise.all([
           getTaskById(taskId),
