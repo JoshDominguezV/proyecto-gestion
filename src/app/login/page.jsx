@@ -4,6 +4,8 @@ import { useState, useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
+
+
 export default function LoginPage() {
   const { login, register } = useContext(AuthContext);
   const router = useRouter();
