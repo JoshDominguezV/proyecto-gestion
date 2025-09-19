@@ -37,6 +37,7 @@ import { AuthProvider } from "@/context/AuthContext";
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
+      <title>ProyectoGestión</title>
       <body>
         <AuthProvider>
           {children}
