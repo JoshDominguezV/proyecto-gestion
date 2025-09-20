@@ -1,10 +1,10 @@
 // src/services/userService.js
 import api from "./api";
 
-// Función para normalizar usuarios
+// Función para normalizar usuarios - Ahora el ID siempre será string
 const normalizeUser = (user) => ({
   ...user,
-  id: typeof user.id === "string" ? parseInt(user.id, 10) : user.id
+  id: user.id.toString() // Convertir a string siempre
 });
 
 export const getUsers = async () => {
@@ -13,25 +13,41 @@ export const getUsers = async () => {
 };
 
 export const getUserById = async (id) => {
-  const numericId = typeof id === "string" ? parseInt(id, 10) : id;
+
+  const stringId = id.toString();
   
-  if (isNaN(numericId)) {
-    throw new Error(`ID inválido: ${id}`);
-  }
-  
-  const res = await api.get(`/users/${numericId}`);
+  const res = await api.get(`/users/${stringId}`);
   return normalizeUser(res.data);
 };
 
 export const createUser = async (user) => {
+
   const users = await getUsers();
-  const maxId = users.reduce((max, u) => (u.id > max ? u.id : max), 0);
   
-  const newUser = normalizeUser({
+
+  const maxId = users.reduce((max, u) => {
+    const currentId = parseInt(u.id, 10);
+    return currentId > max ? currentId : max;
+  }, 0);
+  
+
+  const newUser = {
     ...user,
-    id: maxId + 1
-  });
+    id: (maxId + 1).toString()
+  };
   
   const res = await api.post("/users", newUser);
   return normalizeUser(res.data);
+};
+
+export const updateUser = async (id, userData) => {
+  const stringId = id.toString();
+  
+  const res = await api.put(`/users/${stringId}`, userData);
+  return normalizeUser(res.data);
+};
+
+export const deleteUser = async (id) => {
+  const stringId = id.toString();
+  await api.delete(`/users/${stringId}`);
 };
