@@ -1,4 +1,4 @@
-// src/app/dashboard/users/create/page.jsx
+// src/app/dashboard/users/create/page.js
 "use client";
 import { useState, useContext } from "react";
 import { useRouter } from "next/navigation";
@@ -10,7 +10,8 @@ export default function CreateUserPage() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    role: "usuario"
+    role: "usuario",
+    active: true // Por defecto activo cuando se crea manualmente
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -18,10 +19,10 @@ export default function CreateUserPage() {
   const { user: currentUser } = useContext(AuthContext);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
     if (errors[name]) {
       setErrors(prev => ({
@@ -112,6 +113,22 @@ export default function CreateUserPage() {
               <option value="gerente">Gerente</option>
             </select>
           </div>
+          
+          {currentUser.role === "gerente" && (
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="active"
+                checked={formData.active}
+                onChange={handleChange}
+                className="mr-2"
+                id="active-checkbox"
+              />
+              <label htmlFor="active-checkbox" className="text-sm">
+                Usuario activo (puede iniciar sesión)
+              </label>
+            </div>
+          )}
           
           <div className="flex gap-2 mt-6">
             <button

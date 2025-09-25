@@ -1,4 +1,4 @@
-// src/app/dashboard/users/[id]/edit/page.jsx
+// src/app/dashboard/users/[id]/edit/page.js
 "use client";
 import { useState, useEffect, useContext } from "react";
 import { useRouter, useParams } from "next/navigation";
@@ -10,14 +10,15 @@ export default function EditUserPage() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
-    role: "usuario"
+    role: "usuario",
+    active: true
   });
   const [loading, setLoading] = useState(false);
   const [loadingUser, setLoadingUser] = useState(true);
   const [errors, setErrors] = useState({});
   const router = useRouter();
   const params = useParams();
-  const userId = params.id; // Ahora siempre será string
+  const userId = params.id;
   const { user: currentUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -27,8 +28,9 @@ export default function EditUserPage() {
         const userData = await getUserById(userId);
         setFormData({
           username: userData.username,
-          password: "",
-          role: userData.role
+          password: "", // No cargamos la contraseña por seguridad
+          role: userData.role,
+          active: userData.active
         });
       } catch (error) {
         console.error("Error loading user:", error);
@@ -43,10 +45,10 @@ export default function EditUserPage() {
   }, [userId, router]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: type === 'checkbox' ? checked : value
     }));
     if (errors[name]) {
       setErrors(prev => ({
@@ -145,6 +147,22 @@ export default function EditUserPage() {
               <option value="gerente">Gerente</option>
             </select>
           </div>
+          
+          {currentUser.role === "gerente" && (
+            <div className="flex items-center">
+              <input
+                type="checkbox"
+                name="active"
+                checked={formData.active}
+                onChange={handleChange}
+                className="mr-2"
+                id="active-checkbox"
+              />
+              <label htmlFor="active-checkbox" className="text-sm">
+                Usuario activo (puede iniciar sesión)
+              </label>
+            </div>
+          )}
           
           <div className="flex gap-2 mt-6">
             <button

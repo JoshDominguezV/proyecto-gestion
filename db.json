@@ -1,22 +1,25 @@
 {
   "users": [
     {
-      "id": "2",
-      "username": "rip",
+      "id": "1",
+      "username": "kevs",
       "password": "123",
-      "role": "usuario"
+      "role": "gerente",
+      "active": true
+    },
+    {
+      "id": "2",
+      "username": "josue",
+      "password": "123",
+      "role": "gerente",
+      "active": true
     },
     {
       "id": "3",
-      "username": "kevs",
+      "username": "orx",
       "password": "123",
-      "role": "gerente"
-    },
-    {
-      "id": "4",
-      "username": "admin",
-      "password": "123",
-      "role": "gerente"
+      "role": "usuario",
+      "active": true
     }
   ],
   "projects": [],

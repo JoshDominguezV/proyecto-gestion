@@ -1,14 +1,15 @@
-// src/app/dashboard/users/page.jsx
+// src/app/dashboard/users/page.js
 "use client";
 import { useEffect, useState, useContext } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import { getUsers, deleteUser } from "@/services/userService";
+import { getUsers, deleteUser, updateUser } from "@/services/userService";
 import Link from "next/link";
 import { AuthContext } from "@/context/AuthContext";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [updating, setUpdating] = useState(false);
   const { user: currentUser } = useContext(AuthContext);
 
   const loadUsers = async () => {
@@ -43,6 +44,36 @@ export default function UsersPage() {
     } catch (error) {
       console.error("Error al eliminar usuario:", error);
       alert("Error al eliminar el usuario. Por favor, intenta nuevamente.");
+    }
+  };
+
+  const handleToggleActive = async (id, currentActive) => {
+    if (currentUser.role !== "gerente") {
+      alert("Solo el gerente puede activar/desactivar usuarios");
+      return;
+    }
+    
+    if (!confirm(`¿Estás seguro de ${currentActive ? "desactivar" : "activar"} este usuario?`)) return;
+    
+    try {
+      setUpdating(true);
+      // Obtener el usuario actual primero
+      const userToUpdate = users.find(u => u.id === id);
+      if (!userToUpdate) return;
+      
+      // Actualizar solo el campo active
+      await updateUser(id, {
+        ...userToUpdate,
+        active: !currentActive
+      });
+      
+      await loadUsers(); // Recargar la lista
+      alert(`Usuario ${currentActive ? "desactivado" : "activado"} exitosamente`);
+    } catch (error) {
+      console.error("Error al actualizar usuario:", error);
+      alert("Error al actualizar el usuario. Por favor, intenta nuevamente.");
+    } finally {
+      setUpdating(false);
     }
   };
 
@@ -93,6 +124,7 @@ export default function UsersPage() {
                   <th className="p-3 text-left">ID</th>
                   <th className="p-3 text-left">Usuario</th>
                   <th className="p-3 text-left">Rol</th>
+                  <th className="p-3 text-left">Estado</th>
                   <th className="p-3 text-left">Acciones</th>
                 </tr>
               </thead>
@@ -111,7 +143,16 @@ export default function UsersPage() {
                       </span>
                     </td>
                     <td className="p-3">
-                      <div className="flex gap-2">
+                      <span className={`px-2 py-1 rounded text-xs ${
+                        userItem.active 
+                          ? "bg-green-600" 
+                          : "bg-yellow-600"
+                      }`}>
+                        {userItem.active ? "Activo" : "Pendiente"}
+                      </span>
+                    </td>
+                    <td className="p-3">
+                      <div className="flex gap-2 flex-wrap">
                         <Link 
                           href={`/dashboard/users/${userItem.id}`}
                           className="bg-blue-600 px-3 py-1 rounded hover:bg-blue-700 transition-colors text-sm"
@@ -127,6 +168,18 @@ export default function UsersPage() {
                             >
                               ✏️ Editar
                             </Link>
+                            <button 
+                              onClick={() => handleToggleActive(userItem.id, userItem.active)}
+                              disabled={updating}
+                              className={`px-3 py-1 rounded transition-colors text-sm disabled:opacity-50 ${
+                                userItem.active 
+                                  ? "bg-orange-600 hover:bg-orange-700" 
+                                  : "bg-green-600 hover:bg-green-700"
+                              }`}
+                              title={userItem.id === currentUser.id ? "No puedes desactivar tu propio usuario" : ""}
+                            >
+                              {userItem.active ? "⏸️ Desactivar" : "✅ Activar"}
+                            </button>
                             <button 
                               onClick={() => handleDelete(userItem.id)}
                               className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition-colors text-sm"
@@ -154,23 +207,23 @@ export default function UsersPage() {
                 <div className="text-2xl font-bold">{users.length}</div>
                 <div className="text-gray-400">Total</div>
               </div>
+              <div className="text-center p-3 bg-green-600 rounded">
+                <div className="text-2xl font-bold">
+                  {users.filter(u => u.active).length}
+                </div>
+                <div className="text-white">Activos</div>
+              </div>
+              <div className="text-center p-3 bg-yellow-600 rounded">
+                <div className="text-2xl font-bold">
+                  {users.filter(u => !u.active).length}
+                </div>
+                <div className="text-white">Pendientes</div>
+              </div>
               <div className="text-center p-3 bg-purple-600 rounded">
                 <div className="text-2xl font-bold">
                   {users.filter(u => u.role === "gerente").length}
                 </div>
                 <div className="text-white">Gerentes</div>
-              </div>
-              <div className="text-center p-3 bg-blue-600 rounded">
-                <div className="text-2xl font-bold">
-                  {users.filter(u => u.role === "usuario").length}
-                </div>
-                <div className="text-white">Usuarios</div>
-              </div>
-              <div className="text-center p-3 bg-green-600 rounded">
-                <div className="text-2xl font-bold">
-                  {users.filter(u => u.role !== "gerente" && u.role !== "usuario").length}
-                </div>
-                <div className="text-white">Otros roles</div>
               </div>
             </div>
           </div>

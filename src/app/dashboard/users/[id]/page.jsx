@@ -1,4 +1,4 @@
-// src/app/dashboard/users/[id]/page.jsx
+// src/app/dashboard/users/[id]/page.js
 "use client";
 import { useState, useEffect, useContext } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -12,7 +12,7 @@ export default function UserDetailPage() {
   const [loading, setLoading] = useState(true);
   const params = useParams();
   const router = useRouter();
-  const userId = params.id; // Ahora siempre será string
+  const userId = params.id;
   const { user: currentUser } = useContext(AuthContext);
 
   useEffect(() => {
@@ -95,6 +95,18 @@ export default function UserDetailPage() {
                     : "bg-blue-600"
                 }`}>
                   {userData.role}
+                </span>
+              </p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-gray-400">Estado</h3>
+              <p className="text-white">
+                <span className={`px-2 py-1 rounded text-xs ${
+                  userData.active 
+                    ? "bg-green-600" 
+                    : "bg-yellow-600"
+                }`}>
+                  {userData.active ? "Activo" : "Inactivo/Pendiente"}
                 </span>
               </p>
             </div>
