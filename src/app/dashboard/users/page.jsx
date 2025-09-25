@@ -12,6 +12,9 @@ export default function UsersPage() {
   const [updating, setUpdating] = useState(false);
   const { user: currentUser } = useContext(AuthContext);
 
+  // Safe access usando optional chaining
+  const canManageUsers = currentUser?.role === "gerente";
+
   const loadUsers = async () => {
     try {
       setLoading(true);
@@ -26,11 +29,13 @@ export default function UsersPage() {
   };
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    if (currentUser) { // Solo cargar si hay usuario autenticado
+      loadUsers();
+    }
+  }, [currentUser]); // Dependencia de currentUser
 
   const handleDelete = async (id) => {
-    if (currentUser.role !== "gerente") {
+    if (!canManageUsers) {
       alert("Solo el gerente puede eliminar usuarios");
       return;
     }
@@ -48,7 +53,7 @@ export default function UsersPage() {
   };
 
   const handleToggleActive = async (id, currentActive) => {
-    if (currentUser.role !== "gerente") {
+    if (!canManageUsers) {
       alert("Solo el gerente puede activar/desactivar usuarios");
       return;
     }
@@ -57,17 +62,15 @@ export default function UsersPage() {
     
     try {
       setUpdating(true);
-      // Obtener el usuario actual primero
       const userToUpdate = users.find(u => u.id === id);
       if (!userToUpdate) return;
       
-      // Actualizar solo el campo active
       await updateUser(id, {
         ...userToUpdate,
         active: !currentActive
       });
       
-      await loadUsers(); // Recargar la lista
+      await loadUsers();
       alert(`Usuario ${currentActive ? "desactivado" : "activado"} exitosamente`);
     } catch (error) {
       console.error("Error al actualizar usuario:", error);
@@ -94,7 +97,7 @@ export default function UsersPage() {
       <div className="p-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Gestión de Usuarios</h1>
-          {currentUser.role === "gerente" && (
+          {canManageUsers && (
             <Link 
               href="/dashboard/users/create" 
               className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition-colors"
@@ -107,7 +110,7 @@ export default function UsersPage() {
         {users.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
             <p className="text-lg mb-2">No hay usuarios registrados</p>
-            {currentUser.role === "gerente" && (
+            {canManageUsers && (
               <Link 
                 href="/dashboard/users/create" 
                 className="text-blue-400 hover:text-blue-300"
@@ -160,7 +163,7 @@ export default function UsersPage() {
                           👁️ Ver
                         </Link>
                         
-                        {currentUser.role === "gerente" && (
+                        {canManageUsers && (
                           <>
                             <Link 
                               href={`/dashboard/users/${userItem.id}/edit`}
@@ -176,15 +179,15 @@ export default function UsersPage() {
                                   ? "bg-orange-600 hover:bg-orange-700" 
                                   : "bg-green-600 hover:bg-green-700"
                               }`}
-                              title={userItem.id === currentUser.id ? "No puedes desactivar tu propio usuario" : ""}
+                              title={userItem.id === currentUser?.id ? "No puedes desactivar tu propio usuario" : ""}
                             >
                               {userItem.active ? "⏸️ Desactivar" : "✅ Activar"}
                             </button>
                             <button 
                               onClick={() => handleDelete(userItem.id)}
                               className="bg-red-600 px-3 py-1 rounded hover:bg-red-700 transition-colors text-sm"
-                              disabled={userItem.id === currentUser.id}
-                              title={userItem.id === currentUser.id ? "No puedes eliminar tu propio usuario" : ""}
+                              disabled={userItem.id === currentUser?.id}
+                              title={userItem.id === currentUser?.id ? "No puedes eliminar tu propio usuario" : ""}
                             >
                               🗑️ Eliminar
                             </button>
@@ -199,7 +202,7 @@ export default function UsersPage() {
           </div>
         )}
 
-        {currentUser.role === "gerente" && users.length > 0 && (
+        {canManageUsers && users.length > 0 && (
           <div className="mt-8 p-4 bg-gray-800 rounded-lg">
             <h3 className="font-semibold mb-3">Estadísticas de usuarios</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
