@@ -6,19 +6,34 @@ import { loginUser, registerUser, sanitizeUser } from "@/services/authService";
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  // inicializar desde localStorage (sin window error)
-  const [user, setUser] = useState(() => {
-    try {
-      if (typeof window === "undefined") return null;
-      const s = localStorage.getItem("user");
-      return s ? JSON.parse(s) : null;
-    } catch (e) {
-      return null;
-    }
-  });
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true); // Estado de carga
+
+  // Inicializar desde localStorage
+  useEffect(() => {
+    const initializeAuth = () => {
+      try {
+        if (typeof window === "undefined") {
+          setLoading(false);
+          return;
+        }
+        
+        const s = localStorage.getItem("user");
+        if (s) {
+          const parsed = JSON.parse(s);
+          setUser(parsed);
+        }
+      } catch (e) {
+        console.error("Error loading user from localStorage:", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
+  }, []);
 
   const login = async (username, password) => {
-    // validación básica
     if (!username || !password) throw new Error("Usuario y contraseña requeridos");
     const found = await loginUser(username, password);
     if (!found) throw new Error("Credenciales inválidas");
@@ -40,16 +55,14 @@ export function AuthProvider({ children }) {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("user");
-    if (typeof window !== "undefined") window.location.href = "/login";
+    // Redirigir inmediatamente
+    if (typeof window !== "undefined") {
+      window.location.href = "/login";
+    }
   };
 
-  // opcional: refrescar user desde storage si cambia (poca necesidad)
-  useEffect(() => {
-    // nada especial, ya inicializado
-  }, []);
-
   return (
-    <AuthContext.Provider value={{ user, login, register, logout }}>
+    <AuthContext.Provider value={{ user, login, register, logout, loading }}>
       {children}
     </AuthContext.Provider>
   );

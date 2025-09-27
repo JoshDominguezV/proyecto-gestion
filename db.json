@@ -2,25 +2,26 @@
   "users": [
     {
       "id": "1",
-      "username": "admin",
+      "username": "kevs",
       "password": "123",
-      "role": "gerente"
+      "role": "gerente",
+      "active": true
     },
     {
       "id": "2",
-      "username": "jose",
+      "username": "josue",
       "password": "123",
-      "role": "usuario"
+      "role": "gerente",
+      "active": true
     },
     {
-      "id": "26aa",
-      "username": "admin5",
-      "password": "56666",
-      "role": "usuario"
+      "id": "3",
+      "username": "orx",
+      "password": "123",
+      "role": "usuario",
+      "active": true
     }
   ],
-  "projects": [
-
-  ],
+  "projects": [],
   "tasks": []
 }

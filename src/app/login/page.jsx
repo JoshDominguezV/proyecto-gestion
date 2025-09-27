@@ -4,8 +4,6 @@ import { useState, useContext } from "react";
 import { AuthContext } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
-
-
 export default function LoginPage() {
   const { login, register } = useContext(AuthContext);
   const router = useRouter();
@@ -22,10 +20,14 @@ export default function LoginPage() {
     try {
       if (isRegister) {
         await register(username, password, "usuario");
+        setErr("¡Registro exitoso! Su cuenta está pendiente de verificación por un administrador. Se le notificará cuando pueda acceder.");
+        setIsRegister(false);
+        setUsername("");
+        setPassword("");
       } else {
         await login(username, password);
+        router.push("/dashboard");
       }
-      router.push("/dashboard");
     } catch (error) {
       setErr((error && error.message) || "Error desconocido");
     } finally {
@@ -56,11 +58,19 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          {err && <div className="text-red-400">{err}</div>}
+          {err && (
+            <div className={`p-3 rounded text-sm ${
+              err.includes("pendiente de verificación") || err.includes("éxito") 
+                ? "bg-yellow-600 text-yellow-100" 
+                : "bg-red-600 text-red-100"
+            }`}>
+              {err}
+            </div>
+          )}
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+            className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700 disabled:opacity-50"
           >
             {loading ? "Procesando..." : isRegister ? "Registrar" : "Ingresar"}
           </button>
