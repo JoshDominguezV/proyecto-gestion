@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { AuthContext } from "@/context/AuthContext";
-import { Menu, X } from "lucide-react"; // íconos para abrir/cerrar menú
+import { Menu, X } from "lucide-react";
 
 export default function DashboardLayout({ children }) {
   const { user, logout } = useContext(AuthContext);
@@ -22,7 +22,6 @@ export default function DashboardLayout({ children }) {
       >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-2xl font-bold">ProyectoGestión</h2>
-          {/* Botón cerrar (solo visible en móviles) */}
           <button
             className="md:hidden"
             onClick={() => setSidebarOpen(false)}
@@ -38,6 +37,9 @@ export default function DashboardLayout({ children }) {
           <Link href="/dashboard" className="hover:bg-gray-700 p-2 rounded">Inicio</Link>
           <Link href="/dashboard/projects" className="hover:bg-gray-700 p-2 rounded">Proyectos</Link>
           <Link href="/dashboard/tasks" className="hover:bg-gray-700 p-2 rounded">Tareas</Link>
+          {user?.role === "gerente" && (
+            <Link href="/dashboard/users" className="hover:bg-gray-700 p-2 rounded">Usuarios</Link>
+          )}
         </nav>
 
         <button
@@ -50,7 +52,6 @@ export default function DashboardLayout({ children }) {
 
       {/* Contenido principal */}
       <main className="flex-1 md:ml-64 p-6 bg-gray-900 overflow-auto">
-        {/* Botón hamburguesa (solo móviles) */}
         <div className="md:hidden mb-4">
           <button
             onClick={() => setSidebarOpen(true)}
