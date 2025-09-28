@@ -5,19 +5,19 @@ import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { createUser } from "@/services/userService";
 import { AuthContext } from "@/context/AuthContext";
-
+ 
 export default function CreateUserPage() {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     role: "usuario",
-    active: true // Por defecto activo cuando se crea manualmente
+    active: true
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const router = useRouter();
   const { user: currentUser } = useContext(AuthContext);
-
+ 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData(prev => ({
@@ -31,7 +31,7 @@ export default function CreateUserPage() {
       }));
     }
   };
-
+ 
   const validateForm = () => {
     const newErrors = {};
     
@@ -50,7 +50,7 @@ export default function CreateUserPage() {
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -68,7 +68,7 @@ export default function CreateUserPage() {
       setLoading(false);
     }
   };
-
+ 
   return (
     <ProtectedRoute>
       <div className="p-4 max-w-2xl mx-auto">
@@ -114,7 +114,8 @@ export default function CreateUserPage() {
             </select>
           </div>
           
-          {currentUser?.role === "gerente" && (
+          {/* Verificar que currentUser existe antes de acceder a su propiedad role */}
+          {currentUser && currentUser?.role === "gerente" && (
             <div className="flex items-center">
               <input
                 type="checkbox"
@@ -151,3 +152,4 @@ export default function CreateUserPage() {
     </ProtectedRoute>
   );
 }
+ 
