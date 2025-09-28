@@ -71,7 +71,7 @@ export default function EditProject() {
     e.preventDefault();
     if (!project) return;
 
-    if (user.role !== "gerente") {
+    if (user?.role !== "gerente") {
       alert("Solo el gerente puede editar proyectos");
       return;
     }
@@ -184,7 +184,7 @@ export default function EditProject() {
                 className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none text-white"
                 placeholder="Nombre del proyecto"
                 required
-                disabled={user.role !== "gerente"}
+                disabled={user?.role !== "gerente"}
               />
             </div>
 
@@ -197,7 +197,7 @@ export default function EditProject() {
                 value={project.createdAt || ""}
                 onChange={(e) => handleInputChange("createdAt", e.target.value)}
                 className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none text-white"
-                disabled={user.role !== "gerente"}
+                disabled={user?.role !== "gerente"}
               />
             </div>
           </div>
@@ -213,7 +213,7 @@ export default function EditProject() {
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none text-white"
               placeholder="Descripción del proyecto"
               rows="4"
-              disabled={user.role !== "gerente"}
+              disabled={user?.role !== "gerente"}
             />
           </div>
 
@@ -239,8 +239,8 @@ export default function EditProject() {
                       isSelected
                         ? "bg-blue-600 border-blue-500 text-white"
                         : "bg-gray-700 border-gray-600 text-gray-300 hover:border-gray-500"
-                    } ${user.role !== "gerente" ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
-                    onClick={() => user.role === "gerente" && toggleMember(u.id)}
+                    } ${user?.role !== "gerente" ? "cursor-not-allowed opacity-50" : "cursor-pointer"}`}
+                    onClick={() => user?.role === "gerente" && toggleMember(u.id)}
                   >
                     <div className="flex items-center justify-between">
                       <div>
@@ -263,7 +263,7 @@ export default function EditProject() {
             <button
               type="submit"
               className="bg-yellow-500 px-6 py-3 rounded hover:bg-yellow-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors w-full sm:w-auto"
-              disabled={saving || user.role !== "gerente"}
+              disabled={saving || user?.role !== "gerente"}
             >
               {saving ? "Guardando..." : "💾 Guardar cambios"}
             </button>
@@ -276,7 +276,7 @@ export default function EditProject() {
               Cancelar
             </button>
 
-            {user.role !== "gerente" && (
+            {user?.role !== "gerente" && (
               <div className="flex items-center px-4 text-yellow-400 text-sm">
                 ⚠️ Solo gerentes pueden editar proyectos
               </div>

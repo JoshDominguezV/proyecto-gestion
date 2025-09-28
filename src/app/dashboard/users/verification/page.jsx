@@ -31,7 +31,7 @@ export default function UserVerificationPage() {
   }, [currentUser]);
 
   const handleActivation = async (userId, activate) => {
-    if (currentUser.role !== "gerente") {
+    if (currentUser?.role !== "gerente") {
       alert("Solo el gerente puede verificar usuarios");
       return;
     }
