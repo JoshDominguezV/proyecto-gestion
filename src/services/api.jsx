@@ -3,7 +3,7 @@ import axios from 'axios';
 import { normalizeData } from './normalizeService';
 
 
-const API_BASE_URL = 'https://fake-api-4csu.vercel.app/';
+const API_BASE_URL = 'https://fake-api-f2wu.onrender.com/';
 
 
 const api = axios.create({
