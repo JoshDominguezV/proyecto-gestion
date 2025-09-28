@@ -40,7 +40,7 @@ export default function TasksPage() {
   }, []);
 
   const toggleStatus = async (task) => {
-    if (user.role === "usuario" && task.assignedTo !== user.id) {
+    if (user?.role === "usuario" && task.assignedTo !== user.id) {
       return alert("No puedes modificar esta tarea");
     }
     
@@ -58,7 +58,7 @@ export default function TasksPage() {
   };
 
   const handleDelete = async (id) => {
-    if (user.role !== "gerente") {
+    if (user?.role !== "gerente") {
       return alert("Solo el gerente puede eliminar tareas");
     }
     
@@ -86,7 +86,7 @@ const getUserName = (id) => {
   };
 
   // Filtrar tareas según el rol
-  const visibleTasks = user.role === "gerente" 
+  const visibleTasks = user?.role === "gerente" 
     ? tasks 
     : tasks.filter(t => t.assignedTo === user.id);
 
@@ -107,7 +107,7 @@ const getUserName = (id) => {
       <div className="p-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Tareas</h1>
-          {user.role === "gerente" && (
+          {user?.role === "gerente" && (
             <Link 
               href="/dashboard/tasks/create" 
               className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition-colors"
@@ -119,8 +119,8 @@ const getUserName = (id) => {
 
         {visibleTasks.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
-            <p className="text-lg mb-2">No hay tareas {user.role === "usuario" ? "asignadas a ti" : "creadas"}</p>
-            {user.role === "gerente" && (
+            <p className="text-lg mb-2">No hay tareas {user?.role === "usuario" ? "asignadas a ti" : "creadas"}</p>
+            {user?.role === "gerente" && (
               <Link 
                 href="/dashboard/tasks/create" 
                 className="text-blue-400 hover:text-blue-300"
@@ -169,7 +169,7 @@ const getUserName = (id) => {
 
                   <div className="flex flex-col gap-2 ml-4">
                     {/* Botón para cambiar estado */}
-                    {(user.role === "gerente" || task.assignedTo === user.id) && (
+                    {(user?.role === "gerente" || task.assignedTo === user.id) && (
                       <button 
                         onClick={() => toggleStatus(task)}
                         className="bg-yellow-500 px-3 py-2 rounded hover:bg-yellow-600 transition-colors text-sm whitespace-nowrap"
@@ -179,7 +179,7 @@ const getUserName = (id) => {
                     )}
                     
                     {/* Botones solo para gerente */}
-                    {user.role === "gerente" && (
+                    {user?.role === "gerente" && (
                       <>
                         <Link 
                           href={`/dashboard/tasks/${task.id}`}
@@ -203,7 +203,7 @@ const getUserName = (id) => {
         )}
 
         {/* Estadísticas para gerente */}
-        {user.role === "gerente" && tasks.length > 0 && (
+        {user?.role === "gerente" && tasks.length > 0 && (
           <div className="mt-8 p-4 bg-gray-800 rounded-lg">
             <h3 className="font-semibold mb-3">Estadísticas de tareas</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
