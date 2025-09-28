@@ -13,13 +13,6 @@
       "password": "123",
       "role": "gerente",
       "active": true
-    },
-    {
-      "id": "3",
-      "username": "orx",
-      "password": "123",
-      "role": "usuario",
-      "active": true
     }
   ],
   "projects": [],
