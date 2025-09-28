@@ -112,7 +112,7 @@ export default function UserDetailPage() {
             </div>
           </div>
           
-          {currentUser.role === "gerente" && (
+          {currentUser?.role === "gerente" && (
             <div className="flex gap-2 mt-6 pt-4 border-t border-gray-600">
               <Link
                 href={`/dashboard/users/${userData.id}/edit`}

@@ -40,7 +40,7 @@ export default function ProjectsPage() {
   }, []);
 
   const handleDelete = async (id) => {
-    if (user.role !== "gerente") {
+    if (user?.role !== "gerente") {
       alert("Solo el gerente puede eliminar proyectos");
       return;
     }
@@ -74,7 +74,7 @@ export default function ProjectsPage() {
       <div className="p-4">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Proyectos</h1>
-          {user.role === "gerente" && (
+          {user?.role === "gerente" && (
             <Link 
               href="/dashboard/projects/create" 
               className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition-colors"
@@ -87,7 +87,7 @@ export default function ProjectsPage() {
         {projects.length === 0 ? (
           <div className="text-center py-12 text-gray-400">
             <p className="text-lg mb-2">No hay proyectos creados</p>
-            {user.role === "gerente" && (
+            {user?.role === "gerente" && (
               <Link 
                 href="/dashboard/projects/create" 
                 className="text-blue-400 hover:text-blue-300"
@@ -141,7 +141,7 @@ export default function ProjectsPage() {
                       👁️ Ver
                     </Link>
                     
-                    {user.role === "gerente" && (
+                    {user?.role === "gerente" && (
                       <>
                         <Link 
                           href={`/dashboard/projects/${project.id}/edit`}
@@ -165,7 +165,7 @@ export default function ProjectsPage() {
         )}
 
         {/* Estadísticas para gerente */}
-        {user.role === "gerente" && projects.length > 0 && (
+        {user?.role === "gerente" && projects.length > 0 && (
           <div className="mt-8 p-4 bg-gray-800 rounded-lg">
             <h3 className="font-semibold mb-3">Estadísticas de proyectos</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">

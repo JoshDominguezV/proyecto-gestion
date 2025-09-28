@@ -136,7 +136,7 @@ export default function ViewProject() {
         </div>
 
         <div className="flex gap-3 mb-6">
-          {user.role === "gerente" && (
+          {user?.role === "gerente" && (
             <Link 
               href={`/dashboard/projects/${project.id}/edit`}
               className="bg-yellow-500 px-4 py-2 rounded hover:bg-yellow-600 transition-colors"

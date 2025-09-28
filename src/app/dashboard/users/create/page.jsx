@@ -114,7 +114,7 @@ export default function CreateUserPage() {
             </select>
           </div>
           
-          {currentUser.role === "gerente" && (
+          {currentUser?.role === "gerente" && (
             <div className="flex items-center">
               <input
                 type="checkbox"
