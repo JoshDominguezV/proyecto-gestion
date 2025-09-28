@@ -46,7 +46,7 @@ export default function EditTask() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (user.role !== "gerente") {
+    if (user?.role !== "gerente") {
       alert("Solo el gerente puede editar tareas");
       return;
     }
@@ -122,7 +122,7 @@ export default function EditTask() {
               onChange={e => handleChange('title', e.target.value)} 
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none"
               required
-              disabled={user.role !== "gerente"}
+              disabled={user?.role !== "gerente"}
             />
           </div>
 
@@ -133,7 +133,7 @@ export default function EditTask() {
               onChange={e => handleChange('description', e.target.value)} 
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none"
               rows="3"
-              disabled={user.role !== "gerente"}
+              disabled={user?.role !== "gerente"}
             />
           </div>
 
@@ -144,7 +144,7 @@ export default function EditTask() {
               onChange={e => handleChange('projectId', parseInt(e.target.value, 10))}
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none"
               required
-              disabled={user.role !== "gerente"}
+              disabled={user?.role !== "gerente"}
             >
               <option value="">Seleccionar proyecto</option>
               {projects.map(p => (
@@ -159,7 +159,7 @@ export default function EditTask() {
               value={task.assignedTo || ""} 
               onChange={e => handleChange('assignedTo', e.target.value ? parseInt(e.target.value, 10) : null)}
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none"
-              disabled={user.role !== "gerente"}
+              disabled={user?.role !== "gerente"}
             >
               <option value="">Sin asignar</option>
               {users.map(u => (
@@ -174,7 +174,7 @@ export default function EditTask() {
               value={task.status || "pendiente"} 
               onChange={e => handleChange('status', e.target.value)}
               className="w-full p-3 bg-gray-700 border border-gray-600 rounded focus:border-blue-500 focus:outline-none"
-              disabled={user.role !== "gerente"}
+              disabled={user?.role !== "gerente"}
             >
               <option value="pendiente">Pendiente</option>
               <option value="en progreso">En progreso</option>
@@ -182,7 +182,7 @@ export default function EditTask() {
             </select>
           </div>
 
-          {user.role === "gerente" ? (
+          {user?.role === "gerente" ? (
             <div className="flex gap-3 pt-4">
               <button 
                 type="submit" 
